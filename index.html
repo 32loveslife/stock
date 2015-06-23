@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="description" content="Stock Analysis" />
+  <link rel="stylesheet" type="text/css" href="css/myStyle.css">
+  <link rel="icon" href="cf.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="cf.ico" type="image/x-icon" /> 
+  <script src="js/jquery-1.11.1.min.js"></script>
+  <script src="js/hqTable.js" type="text/javascript"></script>
+  <script src="js/sortTable.js" type="text/javascript"></script>
+  <script src="js/stockArr.js" type="text/javascript"></script>
+
+  <script>
+    <!-- 显示隐藏股票行情 -->
+    $(document).ready(function(){
+      $("#xygp").click(function(){
+        $(".hqtabledisplay").fadeToggle();
+      });
+    });
+
+    <!-- 显示隐藏历史关注 -->
+    $(document).ready(function(){
+      $("#lsgz").click(function(){
+        $(".lsgzdisplay").fadeToggle();
+      });
+    });
+
+  </script>
+
+  <title>Stock Analysis</title>
+</head>
+
+<body>
+
+  <div id="container">
+
+    <div id="header">
+      <h1>Stock Analysis</h1>
+    </div>
+    <div id="main">
+
+      <script>
+        emptyIndexMake("index", indexArr);
+        emptyTableMake("stock", hqArr);
+        var stockUrl = urlMake(indexArr, hqArr);
+
+        // 提供jsonp服务的url地址（不管是什么类型的地址，最终生成的返回值都是一段javascript代码）
+        doJsonp(stockUrl, stockArrayMake, 20000);
+
+        var nowTime = new Date();
+        if(nowTime.getHours() >= 9 && nowTime.getHours() <= 15) {
+          setInterval("doJsonp(stockUrl, stockArrayMake, 20000)", "5000");
+        }
+      </script>
+      
+      <div class="morestock">
+        <button type="button" id="xygp">&#8659;&#8659; 点击显示或隐藏更多股票 &#8659;&#8659;</button>
+      </div>
+      <br />
+      
+      <script>
+        historyTableMake("history", historyArr);
+      </script>
+      <div class="morestock">
+        <button type="button" id="lsgz">&#8659;&#8659; 点击显示或隐藏更多股票 &#8659;&#8659;</button>
+      </div>
+      <br/>
+
+    </div>
+
+    <div id="footer">
+      <p>
+
+实时行情每5秒钟自动更新一次，点击表格每列的标题栏可进行排序。
+
+    
+    累计涨跌%，公式为" ((当日股票最新价 - 关注日股票前收盘价) / 关注日股票前收盘价) * 100% "。
+    日均涨跌%，公式为" 累计涨跌 / 关注天数 "。
+    溢价空间%，公式为" ((股票目标价 - 当日股票最新价) / 当日股票最新价) * 100% "。
+    实时业绩，正在调整中。</p>
+
+    </div>
+
+  </div>
+
+</body>
+
+
+</html>
